@@ -5,4 +5,4 @@ from text_similarity.configuration.gcloud_syncer import GCloudSyncher
 
 syncher = GCloudSyncher()
 
-syncher.syncronize_cloud_to_folder("text-similarity-project", 'data.zip','download/data.zip')
+syncher.syncronize_from_cloud_to_folder("text-similarity-project", 'data.zip','download/data.zip')
