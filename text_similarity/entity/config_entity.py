@@ -12,3 +12,11 @@ class DataIngestionConfig:
         self.NEW_ARTIFACTS_DIRECTORY: str = os.path.join(self.INGESTION_ARTIFACTS_DIRECTORY, INGESTION_DATASET_2)
         self.ARCHIVE_DIRECTORY = os.path.join(self.INGESTION_ARTIFACTS_DIRECTORY)
         self.ARCHIEVE_FILE_PATH = os.path.join(self.INGESTION_ARTIFACTS_DIRECTORY, self.ARCHIEVE_NAME)
+        
+
+@dataclass
+class DataTransformationConfig:
+    def __init__(self):
+        self.TRANSFORMATION_ARTIFACTS_DIRECTORY: str = os.path.join(os.getcwd(), ARTIFACTS_DIRECTORY, TRANSFORMATION_ARTIFACTS_DIRECTORY)
+        self.TRANSFROMED_FILE_PATH = os.path.join(self.TRANSFORMATION_ARTIFACTS_DIRECTORY, TRANSFORMED_FILE_NAME)
+        self.COLUMNS = COLUMNS
