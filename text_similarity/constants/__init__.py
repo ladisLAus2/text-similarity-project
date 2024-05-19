@@ -22,3 +22,19 @@ TRANSFORMATION_ARTIFACTS_DIRECTORY = 'TransformationArtifacts'
 TRANSFORMED_FILE_NAME = 'filtered_dataset.csv'
 DATA_DIRECTORY = 'data'
 COLUMNS = [PREMISE, HYPOTHESIS, LABEL]
+
+
+
+MODEL_TRAINER_ARTIFACTS_DIRECTORY = 'ModelTrainerArtifacts'
+TRAINED_MODEL_DIRECTORY = 'trained_model'
+TRAINED_MODEL_NAME = 'model_mnr'
+TRAIN_DATASET = 'train_dataset.csv'
+TEST_DATASET = 'test_dataset.csv'
+
+EPOCH = 1
+BATCH_SIZE = 32
+SPLIT_RATIO = 0.1
+LEARNING_RATE = 2e-5
+
+BASE_MODEL = 'roberta-base'
+SCALE = 20.0

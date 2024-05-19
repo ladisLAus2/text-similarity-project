@@ -2,15 +2,17 @@ import sys
 from text_similarity.logger import logging
 from text_similarity.exception import ExceptionHandler
 from text_similarity.components.data_ingestion import DataIngestion
-from text_similarity.entity.config_entity import (DataIngestionConfig, DataTransformationConfig)
-from text_similarity.entity.artifact_entity import (DataIngestionArtifacts, DataTransformationArtifacts)
+from text_similarity.entity.config_entity import (DataIngestionConfig, DataTransformationConfig, ModelTrainerConfig)
+from text_similarity.entity.artifact_entity import (DataIngestionArtifacts, DataTransformationArtifacts, ModelTrainerArtifacts)
 from text_similarity.components.data_transformation import DataTransformation
+from text_similarity.components.model_trainer import ModelTrainer
 
 class TrainingPipeLine:
     def __init__(self):
         self.data_ingestion_config = DataIngestionConfig()
         self.data_transformation_config = DataTransformationConfig()
-    
+        self.model_trainer_config = ModelTrainerConfig()
+        
     def start_data_ingestion(self) -> DataIngestionArtifacts:
         logging.info('entered the start_data_ingestion method from TrainingPipeLine class')
         try:
@@ -36,11 +38,25 @@ class TrainingPipeLine:
             raise ExceptionHandler(e, sys) from e
     
     
-    def run_pipeline(self):
-        logging.info('entered the run_pipeline method from TrainingPipeLine')
+    def start_model_trainer(self, data_transformation_artifacts) -> ModelTrainerArtifacts:
         try:
+            logging.info('entered the start_model_trainer method from TrainingPipeLine class')
+            
+            model_trainer = ModelTrainer(data_transformation_artifacts=data_transformation_artifacts,
+                                        model_trainer_config=self.model_trainer_config)
+            model_trainer_artifacts = model_trainer.initialize_model_trainer()
+            
+            logging.info('exited the start_model_trainer method from TrainingPipeLine class')
+            return model_trainer_artifacts
+        except Exception as e:
+            raise ExceptionHandler(e, sys) from e
+    
+    def run_pipeline(self):
+        try:
+            logging.info('entered the run_pipeline method from TrainingPipeLine')
             data_ingestion_artifacts = self.start_data_ingestion()
             data_transformation_artifacts = self.start_data_transformation(data_ingestion_artifacts)
+            model_trainer_artifacts = self.start_model_trainer(data_transformation_artifacts)
             logging.info('exited the run_pipeline method from TrainingPipeLine')
         except Exception as e:
             raise ExceptionHandler(e, sys) from e

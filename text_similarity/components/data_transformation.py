@@ -30,7 +30,7 @@ class DataTransformation:
             dataset_2 = dataset_2.remove_columns(columns_to_remove_2)
             
             dataset = datasets.concatenate_datasets([dataset_1['train'], dataset_2['train']])
-            
+            dataset = dataset.select(range(1000))
             dataset = dataset.filter(
                 lambda x: False if x['label'] != 0 else True
             )
@@ -38,7 +38,9 @@ class DataTransformation:
             dataset = dataset.filter(
                 lambda x: 0 if x['label'] in [1,2] else 1
             )
-            
+            dataset = dataset.filter(
+                lambda x: isinstance(x['hypothesis'], str)
+            )
             logging.info('exited into the data_preprocessing method from DataTransformation class')
             
             return dataset

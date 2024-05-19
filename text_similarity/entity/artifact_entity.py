@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+import datasets
 
 @dataclass 
 class DataIngestionArtifacts:
@@ -8,3 +9,8 @@ class DataIngestionArtifacts:
 @dataclass
 class DataTransformationArtifacts:
     transformed_data_path: str
+    
+@dataclass
+class ModelTrainerArtifacts:
+    trained_model_path: str
+    test_dataset: datasets.arrow_dataset.Dataset
