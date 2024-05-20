@@ -15,6 +15,7 @@ LABEL = 'label'
 INGESTION_ARTIFACTS_DIRECTORY = 'IngestionArtifacts'
 INGESTION_DATASET_1 = 'rec.csv'
 INGESTION_DATASET_2 = 'mult.csv'
+INGESTION_DATASET_3 = 'validation.csv'
 
 
 
@@ -38,3 +39,13 @@ LEARNING_RATE = 2e-5
 
 BASE_MODEL = 'roberta-base'
 SCALE = 20.0
+
+
+MODEL_EVALUATION_ARTIFACTS_DIRECTORY = 'ModelEvaluationArtifacts'
+BEST_MODEL_DIRECTORY = 'best_model'
+MODEL_EVALUATION_LOSS_FILE = 'loss.csv'
+EVALUATION_DATSET = 'validation.csv'
+
+APP_HOST = '0.0.0.0'
+APP_PORT = 8080
+

@@ -10,6 +10,7 @@ class DataIngestionConfig:
         self.INGESTION_ARTIFACTS_DIRECTORY : str = os.path.join(os.getcwd(), ARTIFACTS_DIRECTORY, INGESTION_ARTIFACTS_DIRECTORY)
         self.ARTIFACTS_DIRECTORY: str = os.path.join(self.INGESTION_ARTIFACTS_DIRECTORY, INGESTION_DATASET_1)
         self.NEW_ARTIFACTS_DIRECTORY: str = os.path.join(self.INGESTION_ARTIFACTS_DIRECTORY, INGESTION_DATASET_2)
+        self.VALIDATION_ARTIFACTS_DIRECTORY = os.path.join(self.INGESTION_ARTIFACTS_DIRECTORY, INGESTION_DATASET_3)
         self.ARCHIVE_DIRECTORY = os.path.join(self.INGESTION_ARTIFACTS_DIRECTORY)
         self.ARCHIEVE_FILE_PATH = os.path.join(self.INGESTION_ARTIFACTS_DIRECTORY, self.ARCHIEVE_NAME)
         
@@ -19,6 +20,7 @@ class DataTransformationConfig:
     def __init__(self):
         self.TRANSFORMATION_ARTIFACTS_DIRECTORY: str = os.path.join(os.getcwd(), ARTIFACTS_DIRECTORY, TRANSFORMATION_ARTIFACTS_DIRECTORY)
         self.TRANSFROMED_FILE_PATH = os.path.join(self.TRANSFORMATION_ARTIFACTS_DIRECTORY, TRANSFORMED_FILE_NAME)
+        self.VALIDATION_DATASET_PATH = os.path.join(self.TRANSFORMATION_ARTIFACTS_DIRECTORY,INGESTION_DATASET_3)
         self.COLUMNS = COLUMNS
         
         
@@ -35,3 +37,12 @@ class ModelTrainerConfig:
         self.BASE_MODEL = BASE_MODEL
         self.SCALE = SCALE
         self.LEARNING_RATE = LEARNING_RATE
+        
+@dataclass
+class ModelEvaluationConfig:
+    def __init__(self):
+        self.MODEL_EVALUATION_MODEL_DIRECTORY: str = os.path.join(os.getcwd(), ARTIFACTS_DIRECTORY, MODEL_EVALUATION_ARTIFACTS_DIRECTORY)
+        self.BEST_MODEL_PATH = os.path.join(self.MODEL_EVALUATION_MODEL_DIRECTORY, BEST_MODEL_DIRECTORY)
+        self.BUCKET_NAME = BUCKET_NAME
+        self.MODEL_NAME = TRAINED_MODEL_NAME
+        self.EVALUATION_DATASET = EVALUATION_DATSET

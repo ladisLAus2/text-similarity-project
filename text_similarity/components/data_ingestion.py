@@ -29,7 +29,7 @@ class DataIngestion:
                 zip_ref.extractall(self.data_ingestion_config.ARCHIVE_DIRECTORY)
             
             logging.info('exited the unzip method of Dataingestion class')
-            return self.data_ingestion_config.ARTIFACTS_DIRECTORY, self.data_ingestion_config.NEW_ARTIFACTS_DIRECTORY
+            return self.data_ingestion_config.ARTIFACTS_DIRECTORY, self.data_ingestion_config.NEW_ARTIFACTS_DIRECTORY, self.data_ingestion_config.VALIDATION_ARTIFACTS_DIRECTORY
         except Exception as e:
             raise ExceptionHandler(e, sys) from e
     
@@ -38,12 +38,13 @@ class DataIngestion:
         try:
             self.get_data_from_cloud()
             logging.info('downloaded the data from GCloud bucket')
-            dataset_1_file_path, dataset_2_file_path = self.unzip_data()
+            dataset_1_file_path, dataset_2_file_path, validation_file_path = self.unzip_data()
             logging.info('unzipped the data')
 
             data_ingestion_artifacts = DataIngestionArtifacts(
                 dataset_1_file_path=dataset_1_file_path,
-                dataset_2_file_path=dataset_2_file_path
+                dataset_2_file_path=dataset_2_file_path,
+                validation_file_path=validation_file_path
             )
             logging.info('exited the initiate_data_ingestion method of DataIngestion class')
             return data_ingestion_artifacts

@@ -22,6 +22,7 @@ class DataTransformation:
             
             dataset_1 = datasets.load_dataset('csv', data_files=self.data_ingestion_artifacts.dataset_1_file_path)
             dataset_2 = datasets.load_dataset('csv', data_files=self.data_ingestion_artifacts.dataset_2_file_path)
+            validation_dataset = datasets.load_dataset('csv', data_files=self.data_ingestion_artifacts.validation_file_path)
             
             columns_to_remove_1 = [col for col in dataset_1['train'].column_names if col not in self.data_transformation_config.COLUMNS]
             columns_to_remove_2 = [col for col in dataset_2['train'].column_names if col not in self.data_transformation_config.COLUMNS]
@@ -43,7 +44,7 @@ class DataTransformation:
             )
             logging.info('exited into the data_preprocessing method from DataTransformation class')
             
-            return dataset
+            return dataset, validation_dataset
         except Exception as e:
             raise ExceptionHandler(e, sys) from e
         
@@ -51,10 +52,12 @@ class DataTransformation:
         try:
             logging.info('entered into the initiate_data_transformation method from DataTransformation class')
             
-            df = pd.DataFrame(self.data_preprocessing())
+            train_dataset, validation_dataset = self.data_preprocessing()
+            df = pd.DataFrame(train_dataset)
             os.makedirs(self.data_transformation_config.TRANSFORMATION_ARTIFACTS_DIRECTORY, exist_ok=True)
             df.to_csv(self.data_transformation_config.TRANSFROMED_FILE_PATH, index=False, header=True)
-            data_transformation_artifacts = DataTransformationArtifacts(self.data_transformation_config.TRANSFROMED_FILE_PATH)
+            validation_dataset['train'].to_csv(self.data_transformation_config.VALIDATION_DATASET_PATH)
+            data_transformation_artifacts = DataTransformationArtifacts(transformed_data_path=self.data_transformation_config.TRANSFROMED_FILE_PATH, validation_dataset=self.data_transformation_config.VALIDATION_DATASET_PATH)
             
             logging.info('exited into the initiate_data_transformation method from DataTransformation class')
             return data_transformation_artifacts
