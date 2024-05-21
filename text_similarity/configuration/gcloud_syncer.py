@@ -1,7 +1,8 @@
 import os
 from google.cloud import storage
 from tqdm import tqdm
-
+import hashlib
+import base64
 os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = 'credentials.json'
 
 class GCloudSyncher:
@@ -44,3 +45,15 @@ class GCloudSyncher:
         except Exception as e:
             print(e)
             return False
+        
+    def generate_md5(self, file_path):
+        hash_md5 = hashlib.md5()
+        with open(file_path, "rb") as f:
+            for chunk in iter(lambda: f.read(4096), b""):
+                hash_md5.update(chunk)
+        return base64.b64encode(hash_md5.digest()).decode('utf-8')
+    
+    def get_gcs_file_md5(self, bucket_name, file_name):
+        bucket = self.client.get_bucket(bucket_name)
+        blob = bucket.get_blob(file_name)
+        return blob.md5_hash
