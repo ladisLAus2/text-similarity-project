@@ -29,9 +29,9 @@ class PredictionPipeline:
             os.makedirs(self.PREDICTION_MODEL_PATH, exist_ok=True)
             if os.path.exists(os.path.join(self.PREDICTION_MODEL_PATH, self.MODEL_NAME)):
                 local = self.CLOUD.generate_md5(os.path.join(self.PREDICTION_MODEL_PATH, self.MODEL_NAME))
-                print(os.path.join(self.PREDICTION_MODEL_PATH, self.MODEL_NAME))
+                
                 gcloud = self.CLOUD.get_gcs_file_md5(self.BUCKET_NAME, self.MODEL_NAME)
-                print(local, gcloud)
+                
                 if not (local == gcloud):
                     result_model = self.CLOUD.download_file_from_cloud(self.MODEL_NAME,os.path.join(self.PREDICTION_MODEL_PATH, self.MODEL_NAME), self.BUCKET_NAME)
                     result_config = self.CLOUD.download_file_from_cloud(self.CONFIG,os.path.join(self.PREDICTION_MODEL_PATH, self.CONFIG), self.BUCKET_NAME)
@@ -69,8 +69,9 @@ class PredictionPipeline:
             embeddings_1 = self.encode_sentences(sentence_1,model, tokenizer)
             embeddings_2 = self.encode_sentences(sentence_2, model, tokenizer)
             cosine_similarities = util.pytorch_cos_sim(embeddings_1, embeddings_2)
-            return cosine_similarities
             logging.info('exited predict method in PredictionPipeline class')
+            return cosine_similarities
+            
         except Exception as e:
             raise ExceptionHandler(e, sys) from e
         
