@@ -2,12 +2,12 @@ import sys
 from text_similarity.logger import logging
 from text_similarity.exception import ExceptionHandler
 from text_similarity.components.data_ingestion import DataIngestion
-from text_similarity.entity.config_entity import (DataIngestionConfig, DataTransformationConfig, ModelTrainerConfig, ModelEvaluationConfig)
-from text_similarity.entity.artifact_entity import (DataIngestionArtifacts, DataTransformationArtifacts, ModelTrainerArtifacts, ModelEvaluationArtifacts)
+from text_similarity.entity.config_entity import (DataIngestionConfig, DataTransformationConfig, ModelTrainerConfig, ModelEvaluationConfig, ModelPusherConfig)
+from text_similarity.entity.artifact_entity import (DataIngestionArtifacts, DataTransformationArtifacts, ModelTrainerArtifacts, ModelEvaluationArtifacts, ModelPusherArtifacts)
 from text_similarity.components.data_transformation import DataTransformation
 from text_similarity.components.model_trainer import ModelTrainer
 from text_similarity.components.model_evaluation import ModelEvaluation
-
+from text_similarity.components.model_pusher import ModelPusher
 
 class TrainingPipeLine:
     def __init__(self):
@@ -15,6 +15,7 @@ class TrainingPipeLine:
         self.data_transformation_config = DataTransformationConfig()
         self.model_trainer_config = ModelTrainerConfig()
         self.model_evaluation_config = ModelEvaluationConfig()
+        self.model_pusher_config = ModelPusherConfig()
         
     def start_data_ingestion(self) -> DataIngestionArtifacts:
         logging.info('entered the start_data_ingestion method from TrainingPipeLine class')
@@ -65,7 +66,21 @@ class TrainingPipeLine:
         except Exception as e:
             raise ExceptionHandler(e, sys) from e
     
-    def run_pipeline(self):
+    def start_model_pusher(self, model_pusher_config: ModelPusherConfig):
+        try:
+            logging.info('entered the model_pusher_config method from TrainingPipeLine class')
+            
+            model_pusher = ModelPusher(model_pusher_config)
+            
+            model_pusher_artifact = model_pusher.initiate_model_pusher()
+            logging.info('model_pusher was initiated')
+            
+            logging.info('exited the model_pusher_config method from TrainingPipeLine class')
+            return model_pusher_artifact
+        except Exception as e:
+            raise ExceptionHandler(e, sys) from e
+    
+    def run_pipeline(self): 
         try:
             logging.info('entered the run_pipeline method from TrainingPipeLine')
             data_ingestion_artifacts = self.start_data_ingestion()
@@ -75,6 +90,12 @@ class TrainingPipeLine:
                                                                     model_trainer_artifacts=model_trainer_artifacts,
                                                                     data_transformatio_artifacts=data_transformation_artifacts,
                                                                     model_trainer_config=self.model_trainer_config)
+            
+            if not model_evaluation_artifacts.is_model_accepted:
+                raise Exception('trained is not better than cloud one')
+            
+            model_pusher_artifacts = self.start_model_pusher(model_pusher_config=self.model_pusher_config)
+            
             logging.info('exited the run_pipeline method from TrainingPipeLine')
         except Exception as e:
             raise ExceptionHandler(e, sys) from e

@@ -16,9 +16,14 @@ class DataIngestion:
         try:
             logging.info('entered the get_data_from_cloud method from DataIngestion class')
             os.makedirs(self.data_ingestion_config.INGESTION_ARTIFACTS_DIRECTORY, exist_ok=True)
-            self.cloud.syncronize_from_cloud_to_folder(self.data_ingestion_config.BUCKET_NAME, self.data_ingestion_config.ARCHIEVE_NAME, self.data_ingestion_config.INGESTION_ARTIFACTS_DIRECTORY)
+            # self.cloud.syncronize_from_cloud_to_folder(self.data_ingestion_config.BUCKET_NAME, self.data_ingestion_config.ARCHIEVE_NAME, self.data_ingestion_config.INGESTION_ARTIFACTS_DIRECTORY)
+            result = self.cloud.download_file_from_cloud(self.data_ingestion_config.ARCHIEVE_NAME, os.path.join(self.data_ingestion_config.INGESTION_ARTIFACTS_DIRECTORY, self.data_ingestion_config.ARCHIEVE_NAME), self.data_ingestion_config.BUCKET_NAME)
             logging.info('exited the get_data_from_cloud method from DataIngestion class')
-            
+            if result:
+                print('The data was downloaded from cloud')
+            else:
+                print('The data was not downloaded from cloud')
+                raise Exception
         except Exception as e:
             raise ExceptionHandler(e, sys) from e   
 

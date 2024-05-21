@@ -5,6 +5,8 @@ import datasets
 from sklearn.model_selection import train_test_split
 from random import randint
 import sys
+import warnings
+warnings.filterwarnings("ignore", category=FutureWarning, module="huggingface_hub.file_download")
 
 from text_similarity.logger import logging
 from text_similarity.exception import ExceptionHandler
@@ -31,7 +33,7 @@ class DataTransformation:
             dataset_2 = dataset_2.remove_columns(columns_to_remove_2)
             
             dataset = datasets.concatenate_datasets([dataset_1['train'], dataset_2['train']])
-            dataset = dataset.select(range(1000))
+            dataset = dataset.select(range(10000))
             dataset = dataset.filter(
                 lambda x: False if x['label'] != 0 else True
             )

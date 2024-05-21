@@ -28,7 +28,8 @@ COLUMNS = [PREMISE, HYPOTHESIS, LABEL]
 
 MODEL_TRAINER_ARTIFACTS_DIRECTORY = 'ModelTrainerArtifacts'
 TRAINED_MODEL_DIRECTORY = 'trained_model'
-TRAINED_MODEL_NAME = 'model_mnr'
+TRAINED_MODEL_NAME = 'model.safetensors'
+TRAINED_MODEL_CONFIG = 'config.json'
 TRAIN_DATASET = 'train_dataset.csv'
 TEST_DATASET = 'test_dataset.csv'
 
@@ -37,7 +38,7 @@ BATCH_SIZE = 32
 SPLIT_RATIO = 0.1
 LEARNING_RATE = 2e-5
 
-BASE_MODEL = 'roberta-base'
+BASE_MODEL = 'bert-base-uncased'
 SCALE = 20.0
 
 

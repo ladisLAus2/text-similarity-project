@@ -65,7 +65,7 @@ class SBERT:
         ds = Dataset(anchors, positives)
         
         loader = torch.utils.data.DataLoader(ds, batch_size=self.batch_size, shuffle=True)
-        optim = transformers.AdamW(self.model.parameters(), lr=self.learning_rate)
+        optim = transformers.AdamW(self.model.parameters(), lr=self.learning_rate, no_deprecation_warning=True)
         total_steps = int(len(anchors) / self.batch_size)
         warmup_steps = int(0.1 * total_steps)
         scheduler = transformers.optimization.get_linear_schedule_with_warmup(optim, num_warmup_steps=warmup_steps, num_training_steps=total_steps-warmup_steps)

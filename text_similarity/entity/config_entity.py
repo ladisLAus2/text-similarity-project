@@ -28,8 +28,7 @@ class DataTransformationConfig:
 class ModelTrainerConfig:
     def __init__(self):
         self.TRAINED_MODEL_DIRECTORY : str = os.path.join(os.getcwd(), ARTIFACTS_DIRECTORY, MODEL_TRAINER_ARTIFACTS_DIRECTORY)
-        self.TRAINED_MODEL_PATH = os.path.join(self.TRAINED_MODEL_DIRECTORY, TRAINED_MODEL_NAME)
-        self.TEST_DATASET = os.path.join(self.TRAINED_MODEL_DIRECTORY, TEST_DATASET)
+        self.TRAINED_MODEL_PATH = os.path.join(self.TRAINED_MODEL_DIRECTORY, TRAINED_MODEL_DIRECTORY)
         self.TRAIN_DATASET = os.path.join(self.TRAINED_MODEL_DIRECTORY, TRAIN_DATASET)
         self.EPOCH = EPOCH
         self.BATCH_SIZE = BATCH_SIZE
@@ -45,4 +44,14 @@ class ModelEvaluationConfig:
         self.BEST_MODEL_PATH = os.path.join(self.MODEL_EVALUATION_MODEL_DIRECTORY, BEST_MODEL_DIRECTORY)
         self.BUCKET_NAME = BUCKET_NAME
         self.MODEL_NAME = TRAINED_MODEL_NAME
+        self.TRAINED_MODEL_CONFIG = TRAINED_MODEL_CONFIG
         self.EVALUATION_DATASET = EVALUATION_DATSET
+        
+
+@dataclass
+class ModelPusherConfig:
+    def __init__(self):
+        self.TRAINED_MODEL_PATH = os.path.join(os.getcwd(), ARTIFACTS_DIRECTORY, MODEL_TRAINER_ARTIFACTS_DIRECTORY, TRAINED_MODEL_DIRECTORY)
+        self.BUCKET_NAME = BUCKET_NAME
+        self.MODEL_NAME = TRAINED_MODEL_NAME
+        self.CONFIG_NAME = TRAINED_MODEL_CONFIG
