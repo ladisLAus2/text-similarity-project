@@ -92,11 +92,47 @@ class TrainingPipeLine:
                                                                     model_trainer_config=self.model_trainer_config)
             
             if not model_evaluation_artifacts.is_model_accepted:
-                raise Exception('trained is not better than cloud one')
+                return ('trained is not better than cloud one')
             
             model_pusher_artifacts = self.start_model_pusher(model_pusher_config=self.model_pusher_config)
             
             logging.info('exited the run_pipeline method from TrainingPipeLine')
         except Exception as e:
+            raise ExceptionHandler(e, sys) from e
+        
+    def run_pipeline_with_progress(self):
+        try:
+            yield "Starting data ingestion..."
+            data_ingestion_artifacts = self.start_data_ingestion()
+            yield "Data ingestion completed."
+
+            yield "Starting data transformation..."
+            data_transformation_artifacts = self.start_data_transformation(data_ingestion_artifacts)
+            yield "Data transformation completed."
+
+            yield "Starting model training..."
+            model_trainer_artifacts = self.start_model_trainer(data_transformation_artifacts)
+            yield "Model training completed."
+
+            yield "Starting model evaluation..."
+            model_evaluation_artifacts = self.start_model_evaluation(
+                model_evaluation_config=self.model_evaluation_config,
+                model_trainer_artifacts=model_trainer_artifacts,
+                data_transformatio_artifacts=data_transformation_artifacts,
+                model_trainer_config=self.model_trainer_config
+            )
+            yield "Model evaluation completed."
+
+            if not model_evaluation_artifacts.is_model_accepted:
+                yield "Trained model is not better than the cloud one."
+                return ("Trained model is not better than the cloud one.")
+
+            yield "Starting model pusher..."
+            model_pusher_artifacts = self.start_model_pusher(model_pusher_config=self.model_pusher_config)
+            yield "Model pusher completed."
+
+            yield "Pipeline execution completed successfully."
+        except Exception as e:
+            yield f"Error: {e}"
             raise ExceptionHandler(e, sys) from e
             

@@ -16,4 +16,5 @@ transformers
 tqdm
 scipy
 sentence_transformers
+python-multipart
 -e .
